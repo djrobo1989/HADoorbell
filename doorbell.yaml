@@ -1,0 +1,81 @@
+alias: Doorbell
+description: "Reolink Rich notification doorbell"
+trigger:
+  - platform: state
+    entity_id:
+      - binary_sensor.reolink_video_doorbell_poe_visitor
+    to: "on"
+condition: []
+action:
+  - if:
+      - condition: state
+        entity_id: binary_sensor.iphone_Name_focus
+        state: "on"
+    then:
+      - service: camera.snapshot
+        data:
+          filename: /media/local/doorbellsnapshot.jpg
+        target:
+          entity_id: camera.reolink_video_doorbell_poe_snapshots
+      - service: notify.mobile_app_iphone_
+        data:
+          title: Ring!
+          message: Someone at the door!
+          data:
+            image: /media/local/local/doorbellsnapshot.jpg
+            entity_id: camera.reolink_video_doorbell_poe_snapshots
+            push:
+              sound:
+                critical: 0
+                name: new-mail.caf
+                volume: 1
+      - delay:
+          hours: 0
+          minutes: 0
+          seconds: 3
+          milliseconds: 0
+      - service: notify.notificatietelegram
+        data:
+          data:
+            parse_mode: html
+          title: <b><u>Someone was at the door!</u></b>
+          message: at {{ now().hour }}:{{ now().minute }} someone was at the door!
+      - service: notify.notificatietelegram
+        data:
+          message: Someone at the door!
+          title: Ding-dong
+          data:
+            photo:
+              - file: /media/local/doorbellsnapshot.jpg
+    else:
+      - service: camera.snapshot
+        data:
+          filename: /media/local/doorbellsnapshot.jpg
+        target:
+          entity_id: camera.reolink_video_doorbell_poe_snapshots
+      - service: notify.mobile_app_iphone_
+        data:
+          message: Someone at the door!
+          title: Ding-dong
+          data:
+            image: /media/local/local/doorbellsnapshot.jpg
+            entity_id: camera.reolink_video_doorbell_poe_snapshots
+            push:
+              sound:
+                critical: 1
+                name: new-mail.caf
+                volume: 1
+      - service: notify.notificatietelegram
+        data:
+          data:
+            parse_mode: html
+          title: <b><u>Someone was at the door!</u></b>
+          message: At {{ now().hour }}:{{ now().minute }} someone was at the door!
+      - service: notify.notificatietelegram
+        data:
+          message: Someone at the door!
+          title: Doorbell
+          data:
+            photo:
+              - file: /media/local/doorbellsnapshot.jpg
+mode: single
