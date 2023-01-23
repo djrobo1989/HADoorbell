@@ -1,0 +1,14 @@
+homeassistant:
+  allowlist_external_dirs:
+  - /media/local
+
+telegram_bot:
+  - platform: broadcast
+    api_key: !secret telegramapi
+    allowed_chat_ids:
+      - !secret telegramchatid
+
+notify:
+  - platform: telegram
+    name: NotificatieTelegram
+    chat_id: !secret telegramchatid
