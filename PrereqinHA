@@ -1,0 +1,5 @@
+1. HACS https://hacs.xyz/
+2. Reolink IP NVR/cameras https://github.com/JimStar/reolink_cctv (install base first using hacs, then install the integration in HA as normal)
+3. Reolink integration in HA https://www.home-assistant.io/integrations/reolink/
+4. HA Add-on RTSPtoWeb - WebRTC for smooth video output https://github.com/allenporter/stream-addons (add ass repository in HA addons)
+5. Config automation 
